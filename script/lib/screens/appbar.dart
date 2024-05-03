@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:script/screens/bottom_navigation.dart';
-import 'package:script/screens/evaluvation_scheme.dart';
 import 'package:script/screens/first_screen.dart';
 import 'package:script/screens/result_screen.dart';
 
-class Appbar extends StatefulWidget {
+class Appbar extends StatefulWidget{
   @override
   _AppbarState createState() => _AppbarState();
 }
 
-class _AppbarState extends State<Appbar> {
+class _AppbarState extends State<Appbar>{
   int selectedPageIndex = 0;
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = <Widget>[
@@ -17,31 +16,29 @@ class _AppbarState extends State<Appbar> {
     NavigationPage(),
     ResultScreen(),
   ];
-
   void _selectPage(int index) {
     setState(() {
       selectedPageIndex = index;
     });
-  }
-
-  int selectedButtonIndex = -1;
-  List<Color> buttonColors = [
+}
+int selectedButtonIndex = -1;
+List<Color> buttonColors = [
     Colors.white,
     Colors.white,
     Colors.white,
-  ];
-  List<Color> textcolor = [
+];
+List<Color> textcolor = [
     const Color.fromARGB(255, 59, 59, 59),
     const Color.fromARGB(255, 59, 59, 59),
     const Color.fromARGB(255, 59, 59, 59)
-  ];
+];
   List<Color> bordercolor = [
     Colors.black,
     Colors.black,
     Colors.black,
   ];
+void _handleButtonPressed(int index){
 
-  void _handleButtonPressed(int index) {
     setState(() {
       // Check if the button is already selected
       if (selectedButtonIndex == index) {
@@ -67,10 +64,10 @@ class _AppbarState extends State<Appbar> {
         bordercolor[index] = Colors.white;
         // Set selected index for navigation
         _selectedIndex = index;
+        
       }
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -79,76 +76,72 @@ class _AppbarState extends State<Appbar> {
         appBar: AppBar(
           backgroundColor: Colors.white.withOpacity(0),
           elevation: 0,
-          actions: [
-            Padding(
-              padding: EdgeInsets.only(
-                  right: MediaQuery.of(context).size.width * 0.055),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      _handleButtonPressed(0);
-                    },
-                    child: Text(
-                      'HOME',
-                      style: TextStyle(color: textcolor[0]),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      fixedSize: Size(100, 50),
-                      primary: buttonColors[0],
-                      padding: const EdgeInsets.all(0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: bordercolor[0]),
+          centerTitle: true,
+               title:  Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        _handleButtonPressed(0);
+                      },
+                      child: Text(
+                        'HOME',
+                        style: TextStyle(color: textcolor[0]),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        fixedSize: Size(100, 50),
+                        primary: buttonColors[0],
+                        padding: const EdgeInsets.all(0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: bordercolor[0]),
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      _handleButtonPressed(1);
-                    },
-                    child: Text(
-                      'EVALUATE',
-                      style: TextStyle(color: textcolor[1]),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      fixedSize: Size(100, 50),
-                      primary: buttonColors[1],
-                      padding: const EdgeInsets.all(0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: bordercolor[1]),
+                    SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        _handleButtonPressed(1);
+                      },
+                      child: Text(
+                        'EVALUATE',
+                        style: TextStyle(color: textcolor[1]),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        fixedSize: Size(100, 50),
+                        primary: buttonColors[1],
+                        padding: const EdgeInsets.all(0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: bordercolor[1]),
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      _handleButtonPressed(2);
-                    },
-                    child: Text(
-                      'RESULTS',
-                      style: TextStyle(color: textcolor[2]),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      fixedSize: Size(100, 50),
-                      primary: buttonColors[2],
-                      padding: const EdgeInsets.all(0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: bordercolor[2]),
+                    SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        _handleButtonPressed(2);
+                      },
+                      child: Text(
+                        'RESULTS',
+                        style: TextStyle(color: textcolor[2]),
+                      ),
+
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        fixedSize: Size(100, 50),
+                        primary: buttonColors[2],
+                        padding: const EdgeInsets.all(0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: bordercolor[2]),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+                  ],
+                ), 
         ),
         body: _widgetOptions.elementAt(_selectedIndex),
       ),

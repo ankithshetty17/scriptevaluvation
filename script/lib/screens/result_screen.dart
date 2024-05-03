@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class ResultScreen extends StatefulWidget {
   const ResultScreen({Key? key}) : super(key: key);
-
   @override
   State<ResultScreen> createState() => _ResultScreenState();
 }
@@ -12,19 +11,27 @@ class _ResultScreenState extends State<ResultScreen> {
   String? selectedExam;
   List<String> ExamList = ['Quiz', 'Mid-Term', 'Exam'];
   List<String> SubjectList = ['Maths', 'Physics'];
+  int currentPage = 1; // Current page index
+  int totalPages = 3; // Total number of pages
 
-  // List to keep track of selected rows
-  List<bool> _selectedRows = List.generate(3, (index) => false); // Change the size accordingly
+  // List to maintain checkbox states
+  List<bool> checkboxStates = [];
 
-  // List to keep track of expansion panel states
-  List<bool> _expanded = List.generate(2, (index) => false); // Change the size accordingly
+  @override
+  void initState() {
+    super.initState();
+    // Initialize checkbox states
+    checkboxStates = List.generate(4, (index) => false);
+  }
 
   @override
   Widget build(BuildContext context) {
-    int numberOfColumns = 4;
+    int numberOfColumns = 5; // Increase the number of columns
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
+      body: Center(child:
+      SingleChildScrollView(
+       
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -119,20 +126,16 @@ class _ResultScreenState extends State<ResultScreen> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
                           padding: EdgeInsets.only(left: 5),
                           child: Row(
                             children: [
-                              ElevatedButton(
-                                onPressed: () {},
-                                child: Text('Export All Data'),
-                              ),
                               Padding(
                                 padding: EdgeInsets.only(
                                   top: 10,
-                                  left: MediaQuery.of(context).size.width * 0.7,
+                                  left: MediaQuery.of(context).size.width * 1.3,
                                 ),
                                 child: Row(
                                   children: [
@@ -145,80 +148,110 @@ class _ResultScreenState extends State<ResultScreen> {
                             ],
                           ),
                         ),
-                        DataTable(
-                          columns: List.generate(
-                            numberOfColumns,
-                            (index) {
-                              // Return data columns
-                              return DataColumn(
-                                label: Text(
-                                  index == 0
-                                      ? ''
-                                      : index == 1
-                                          ? 'Student Name'
-                                          : index == 2
-                                              ? 'Student ID'
-                                              : 'Max Marks',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              );
-                            },
-                          ),
-                          rows: List.generate(
-                            2, // Change the size accordingly
-                            (index) {
-                              return DataRow(
-                                cells: List.generate(
-                                  numberOfColumns,
-                                  (cellIndex) {
-                                    // Return data cells
-                                    if (cellIndex == 0) {
-                                      // Expansion panel icon
-                                      return DataCell(
-                                        IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              _expanded[index] = !_expanded[index];
-                                            });
-                                          },
-                                          icon: Icon(_expanded[index] ? Icons.arrow_drop_up : Icons.arrow_drop_down),
-                                        ),
-                                      );
-                                    } else {
-                                      // Data cells
-                                      return DataCell(
-                                        Text(
-                                          cellIndex == 1
-                                              ? 'Name $index'
-                                              : cellIndex == 2
-                                                  ? 'ID $index'
-                                                  : cellIndex == 3
-                                                      ? ' $index'
-                                                      : cellIndex == 4
-                                                          ? 'City $index'
-                                                          : 'State $index',
-                                        ),
-                                      );
-                                    }
-                                  },
-                                ),
-                              );
-                            },
+                        SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: DataTable(
+                            columns: List.generate(
+                              numberOfColumns,
+                              (index) {
+                                // Return data columns
+                                return DataColumn(
+                                  label: Text(
+                                    index == 0
+                                        ? ''
+                                        : index == 1
+                                            ? 'Student Name'
+                                            : index == 2
+                                                ? 'Student ID'
+                                                : index == 3
+                                                    ? 'Max Marks'
+                                                    : 'City', // Added column for City
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                );
+                              },
+                            ),
+                            rows: List.generate(
+                              4, // Number of rows
+                              (index) {
+                                return DataRow(
+                                  cells: List.generate(
+                                    numberOfColumns,
+                                    (cellIndex) {
+                                      if (cellIndex == 0) {
+                                        // First cell with checkbox
+                                        return DataCell(
+                                          GestureDetector(
+                                            onTap: () {
+                                              // Show the popup card when tapped
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: Text('Student Details'),
+                                                    content: Text('Details of student ${(index + 1)}'),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                        child: Text('Close'),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Icon(
+                                              checkboxStates[index] ? Icons.check_box : Icons.check_box_outline_blank,
+                                              color: checkboxStates[index] ? Colors.blue : Colors.grey,
+                                              size: 17,
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        // Other cells
+                                        return DataCell(Text('Data ${(index + 1)}'));
+                                      }
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         ),
                         SizedBox(height: 10),
-                        // Expansion panels for additional content
-                        ...List.generate(
-                          2, // Change the size accordingly
-                          (index) {
-                            return _expanded[index]
-                                ? Container(
-                                    padding: EdgeInsets.all(8),
-                                    color: Colors.grey[200],
-                                    child: Text('Expanded Content for Row ${index + 1}'),
-                                  )
-                                : SizedBox.shrink();
-                          },
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  if (currentPage > 1) {
+                                    setState(() {
+                                      currentPage--;
+                                    });
+                                  }
+                                },
+                                icon: Icon(Icons.keyboard_arrow_left),
+                              ),
+                              Text(
+                                'Page $currentPage of $totalPages',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  if (currentPage < totalPages) {
+                                    setState(() {
+                                      currentPage++;
+                                    });
+                                  }
+                                },
+                                icon: Icon(Icons.keyboard_arrow_right),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -229,6 +262,13 @@ class _ResultScreenState extends State<ResultScreen> {
           ],
         ),
       ),
+      ),
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: ResultScreen(),
+  ));
 }

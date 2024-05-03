@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -70,6 +71,7 @@ Future<void> _pickExpectedanswerScript() async {
                   child: Center(
                     child: Expanded(
                       child: TextFormField(
+                          
                         maxLines: null,
                         textAlign: TextAlign.center,
                         decoration: const InputDecoration(
@@ -101,6 +103,8 @@ Future<void> _pickExpectedanswerScript() async {
                   child: Center(
                     child: Expanded(
                       child: TextField(
+                          keyboardType:
+                                TextInputType.numberWithOptions(decimal: false,),
                         textAlign: TextAlign.center,
                         decoration: const InputDecoration(
                           hintText: "MAX MARKS",
@@ -116,7 +120,7 @@ Future<void> _pickExpectedanswerScript() async {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  GestureDetector(
+                  GestureDetector(  
                     onTap: _pickAnswerScript,
                     child: Container(
                       height: 200,
